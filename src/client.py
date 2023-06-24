@@ -43,7 +43,7 @@ class Client(discord.Client):
             channel_history[message.channel.id].append(prepared_message)
 
             try:
-                reply = palm.reply(channel_history[message.channel.id])
+                reply = palm.reply(channel_history[message.channel.id], self)
 
                 post_reply_time = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
                 bot_reply = (

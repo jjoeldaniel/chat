@@ -1,4 +1,5 @@
 import os
+import discord
 from dotenv import load_dotenv
 import google.generativeai as palm
 
@@ -20,7 +21,7 @@ def is_valid_response(response: palm.types.Completion) -> bool:
     return True
 
 
-def reply(history: list) -> str:
+def reply(history: list, client: discord.Client) -> str:
     defaults = {
         "model": "models/text-bison-001",
         "temperature": 1.0,
@@ -42,8 +43,8 @@ def reply(history: list) -> str:
     message_history = "\n".join(history)
 
     prompt = f"""
-    You are Jane, you are a highly opinionated chatbot with a sense
-    of humor.
+    You are {client.user.display_name}, you are a highly opinionated
+    chatbot with a sense of humor.
 
     Given this list of Discord messages,
     reply to the last message with a message of your own.
@@ -61,6 +62,6 @@ def reply(history: list) -> str:
     # Check if response includes own name
     first_word = response.result.split(" ")[0]
     if ":" in first_word:
-        return response.result[len(first_word)+1:]
+        return response.result[len(first_word) + 1 :]
 
     return response.result
