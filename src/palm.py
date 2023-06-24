@@ -1,3 +1,4 @@
+import asyncio
 import os
 import discord
 from dotenv import load_dotenv
@@ -21,14 +22,14 @@ def is_valid_response(response: palm.types.Completion) -> bool:
     return True
 
 
-def reply(history: list, client: discord.Client) -> str:
+def generate_reply(history: list, display_name: str) -> str:
     defaults = {
         "model": "models/text-bison-001",
         "temperature": 1.0,
         "candidate_count": 1,
         "top_k": 100,
         "top_p": 0.95,
-        "max_output_tokens": 3072,
+        "max_output_tokens": 5120,
         "stop_sequences": [],
         "safety_settings": [
             {"category": "HARM_CATEGORY_DEROGATORY", "threshold": 3},
@@ -43,7 +44,7 @@ def reply(history: list, client: discord.Client) -> str:
     message_history = "\n".join(history)
 
     prompt = f"""
-    You are {client.user.display_name}, you are a highly opinionated
+    You are {display_name}, you are a highly opinionated
     chatbot with a sense of humor.
 
     Given this list of Discord messages,
@@ -65,3 +66,9 @@ def reply(history: list, client: discord.Client) -> str:
         return response.result[len(first_word) + 1 :]
 
     return response.result
+
+
+async def reply(history: list, client: discord.Client) -> str:
+    display_name = client.user.display_name
+    res = await asyncio.to_thread(generate_reply, history, display_name)
+    return res
