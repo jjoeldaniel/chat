@@ -37,15 +37,19 @@ class Client(discord.Client):
             current_time = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
 
             # prepare and add to limit
-            prepared_message = (
-                f"{message.author} ({current_time}): {message.content.strip()}"
-            )
+            prepared_message = f"{message.author.display_name} ({current_time}): {message.content.strip()}"
 
             # insert into channel history
             channel_history[message.channel.id].append(prepared_message)
 
             try:
                 reply = palm.reply(channel_history[message.channel.id])
+
+                post_reply_time = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
+                bot_reply = (
+                    f"{self.user.display_name} ({post_reply_time}): {reply.strip()}"
+                )
+                channel_history[message.channel.id].append(bot_reply)
 
                 await message.reply(reply, mention_author=False)
 
