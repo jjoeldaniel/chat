@@ -43,8 +43,7 @@ def reply(history: list) -> str:
 
     prompt = f"""
     You are Jane, you are a highly opinionated chatbot with a sense
-    of humor. You are in a Discord server with childish humor, so
-    do not act professional.
+    of humor.
 
     Given this list of Discord messages,
     reply to the last message with a message of your own.
@@ -58,5 +57,10 @@ def reply(history: list) -> str:
     # Check for errors
     if not is_valid_response(response):
         return "Uh oh, something went wrong, try again later!"
+
+    # Check if response includes own name
+    first_word = response.result.split(" ")[0]
+    if ":" in first_word:
+        return response.result[len(first_word)+1:]
 
     return response.result
