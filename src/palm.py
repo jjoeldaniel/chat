@@ -3,6 +3,7 @@ import os
 import discord
 from dotenv import load_dotenv
 import google.generativeai as palm
+from icecream import ic
 
 load_dotenv()
 TOKEN = os.getenv("PALM_API_KEY")
@@ -14,10 +15,16 @@ def is_valid_response(response: palm.types.Completion) -> bool:
         filters = response.filters
         safety_feedback = response.safety_feedback
 
+        err_res = ""
+
         if filters is not None and len(filters) > 0:
-            print(filters)
+            err_res += f"Filters triggered: {filters}\n"
         if safety_feedback is not None and len(safety_feedback) > 0:
-            print(safety_feedback)
+            err_res += f"Safety feedback triggered: {safety_feedback}\n"
+
+        if err_res != "":
+            ic(err_res)
+
         return False
     return True
 

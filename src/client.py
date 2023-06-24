@@ -4,6 +4,7 @@ import palm
 from dotenv import load_dotenv
 from datetime import datetime
 import discord
+from icecream import ic
 
 # load from .env
 load_dotenv()
@@ -30,7 +31,6 @@ def should_reply(client: discord.Client, message: discord.Message) -> bool:
 class Client(discord.Client):
     async def on_ready(self: discord.Client):
         print(f"Logged in as {self.user} (ID: {self.user.id})")
-        print("----------------------------------------------")
 
     async def on_message(self, message: discord.Message):
         if should_reply(self, message):
@@ -54,11 +54,15 @@ class Client(discord.Client):
                 await message.reply(reply, mention_author=False)
 
             except Exception as e:
-                print(e)
+                ic(e)
+
                 await message.reply(
                     "Uh oh, something went wrong, try again later!",
                     mention_author=False,
                 )
+
+                # pop last message
+                channel_history[message.channel.id].pop()
 
 
 def main():
