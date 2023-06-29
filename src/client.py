@@ -48,10 +48,7 @@ class Client(discord.Client):
             try:
                 reply = await palm.reply(channel_history[message.channel.id], self)
 
-                post_reply_time = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
-                bot_reply = (
-                    f"{self.user.display_name} ({post_reply_time}): {reply.strip()}"
-                )
+                bot_reply = f"{self.user.display_name}: {reply.strip()}"
                 channel_history[message.channel.id].append(bot_reply)
 
                 await message.reply(reply, mention_author=False)
