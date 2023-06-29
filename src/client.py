@@ -21,8 +21,11 @@ def should_reply(client: discord.Client, message: discord.Message) -> bool:
     Return: Boolean if Client should reply
     """
 
-    # Check permissions
-    if not message.channel.permissions_for(message.guild.me).send_messages:
+    # Check permissions and if message is from bot
+    if (
+        message.author.bot
+        or not message.channel.permissions_for(message.guild.me).send_messages
+    ):
         return False
 
     return client.user.mentioned_in(message)
