@@ -9,7 +9,7 @@ from icecream import ic
 # load from .env
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
-channel_history = defaultdict(list)  # key: channel id, value: list of messages
+channel_history = defaultdict(list[str])  # channel id, list of messages
 
 
 def should_reply(client: discord.Client, message: discord.Message) -> bool:
@@ -37,10 +37,10 @@ class Client(discord.Client):
 
     async def on_message(self, message: discord.Message):
         if should_reply(self, message):
-            current_time = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
-
             # prepare and add to limit
-            prepared_message = f"{message.author.display_name} ({current_time}): {message.content.strip()}"
+            prepared_message = (
+                f"{message.author.display_name}: {message.content.strip()}"
+            )
 
             # insert into channel history
             channel_history[message.channel.id].append(prepared_message)
