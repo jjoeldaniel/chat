@@ -19,8 +19,9 @@ def is_valid_response(response: palm.types.Completion) -> bool:
 
         if filters is not None and len(filters) > 0:
             err_res += f"Filters triggered: {filters}\n"
-        if safety_feedback is not None and len(safety_feedback) > 0:
-            err_res += f"Safety feedback triggered: {safety_feedback}\n"
+
+            if safety_feedback is not None and len(safety_feedback) > 0:
+                err_res += f"Safety feedback triggered: {safety_feedback}\n"
 
         if err_res != "":
             ic(err_res)
