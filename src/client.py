@@ -9,6 +9,7 @@ from icecream import ic
 # load from .env
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
+LIMIT = int(os.getenv("LIMIT", 10))
 channel_history = defaultdict(list[str])  # channel id, list of messages
 
 
@@ -41,6 +42,10 @@ class Client(discord.Client):
             prepared_message = (
                 f"{message.author.display_name}: {message.content.strip()}"
             )
+
+            # Check if limit reached
+            if len(channel_history[message.channel.id]) >= LIMIT:
+                channel_history[message.channel.id].clear()
 
             # insert into channel history
             channel_history[message.channel.id].append(prepared_message)
