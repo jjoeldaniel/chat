@@ -49,7 +49,9 @@ class Client(discord.Client):
                 reply = await palm.reply(channel_history[message.channel.id], self)
 
                 bot_reply = f"{self.user.display_name}: {reply.strip()}"
+
                 channel_history[message.channel.id].append(bot_reply)
+                channel_history[message.channel.id].append("NEXT REQUEST")
 
                 await message.reply(reply, mention_author=False)
 
