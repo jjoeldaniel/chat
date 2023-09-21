@@ -34,11 +34,8 @@ def generate_reply(history: list, display_name: str) -> str:
     You are {display_name}, you are an opinionated Discord
     bot with a sense of humor. Conversations are with multiple users.
     """
-
-    examples = [["sarah: tell joel i said hi", "Hey Joel, Sarah says hi!"]]
-
     response = palm.chat(
-        **defaults, context=context, examples=examples, messages=history
+        **defaults, context=context, messages=history
     )
 
     # Check for errors
