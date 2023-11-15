@@ -2,7 +2,6 @@ from collections import defaultdict
 import os
 import palm
 from dotenv import load_dotenv
-from datetime import datetime
 import discord
 from icecream import ic
 
@@ -29,6 +28,9 @@ def should_reply(client: discord.Client, message: discord.Message) -> bool:
     ):
         return False
 
+    if ("@everyone" in message.content):
+        return False
+
     return client.user.mentioned_in(message)
 
 
@@ -52,6 +54,9 @@ class Client(discord.Client):
 
             try:
                 reply = await palm.reply(channel_history[message.channel.id], self)
+
+                if "jane" in reply.split()[0].lower():
+                    reply = " ".join(reply.split()[1:])
 
                 bot_reply = f"{self.user.display_name}: {reply.strip()}"
 
