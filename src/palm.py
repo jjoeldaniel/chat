@@ -30,8 +30,8 @@ def generate_reply(history: list, display_name: str) -> str:
         "top_p": 0.95,
     }
 
-    context = f"""
-    You are {display_name}, you are an opinionated Discord
+    context = """
+    You are Jane, you are an opinionated Discord
     bot with a sense of humor. Conversations are with multiple users.
     """
     response = palm.chat(
